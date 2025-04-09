@@ -1,6 +1,7 @@
 # 🧘‍♀️ LIBERCARE - Assistant Médical Intelligent
 
-![LIBERCARE Banner](![image](https://github.com/user-attachments/assets/58fa54db-38af-4cc2-934a-a2fc0cbdf177))
+![LIBERCARE Banner](![image](https://github.com/user-attachments/assets/81f59f3b-5a59-48e9-9344-400cc86ea4d0)
+)
 
 ## 💡 À propos
 
