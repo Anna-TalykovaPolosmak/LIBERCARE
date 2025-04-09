@@ -5,6 +5,11 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 import os
 
+# Fix for SQLite version issue
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 class MedicalChatbot:
     def __init__(self, language='fr'):
         self.language = language
@@ -45,7 +50,7 @@ class MedicalChatbot:
         try:
             vectorstore = Chroma(
                 persist_directory=persist_directory,
-                embedding_function=self.embeddings.embed_query  # Исправлено здесь
+                embedding_function=self.embeddings.embed_query
             )
             vectorstore.similarity_search("test", k=1)
             return vectorstore
@@ -54,13 +59,12 @@ class MedicalChatbot:
             vectorstore = Chroma.from_texts(
                 texts=[doc["content"] for doc in documents],
                 metadatas=[doc["metadata"] for doc in documents],
-                embedding=self.embeddings,  # Исправлено здесь
+                embedding=self.embeddings,
                 persist_directory=persist_directory
             )
             vectorstore.persist()
             return vectorstore
 
-    # Все остальные методы остаются без изменений
     def _prepare_medical_documents(self):
         documents = []
         for _, med in self.medications.iterrows():
@@ -165,7 +169,6 @@ class MedicalChatbot:
                         <ul style="list-style-type: none; padding-left: 0;">
             """
             
-            # Ajout des médicaments
             for med in medications:
                 if med.strip():
                     html_response += f'<li style="margin-bottom: 10px; padding-left: 20px; position: relative;">{med}</li>'
@@ -178,7 +181,6 @@ class MedicalChatbot:
                         <ul style="list-style-type: none; padding-left: 0;">
             """
             
-            # Ajout des remèdes naturels
             for remedy in remedies:
                 if remedy.strip():
                     html_response += f'<li style="margin-bottom: 10px; padding-left: 20px; position: relative;">{remedy}</li>'
@@ -189,7 +191,6 @@ class MedicalChatbot:
                 </div>
             """
             
-            # Ajout des précautions si présentes
             if precautions:
                 html_response += """
                 <div style="background-color: rgba(255, 152, 0, 0.2); padding: 15px; border-radius: 8px; color: white; margin-bottom: 10px;">
@@ -206,7 +207,6 @@ class MedicalChatbot:
                 </div>
                 """
             
-            # Fermeture de la div principale
             html_response += """
             </div>
             """
