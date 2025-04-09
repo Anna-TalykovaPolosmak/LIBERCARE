@@ -45,7 +45,7 @@ class MedicalChatbot:
         try:
             vectorstore = Chroma(
                 persist_directory=persist_directory,
-                embedding_function=self.embeddings
+                embedding_function=self.embeddings.embed_query  # Исправлено здесь
             )
             vectorstore.similarity_search("test", k=1)
             return vectorstore
@@ -54,12 +54,13 @@ class MedicalChatbot:
             vectorstore = Chroma.from_texts(
                 texts=[doc["content"] for doc in documents],
                 metadatas=[doc["metadata"] for doc in documents],
-                embedding_function=self.embeddings,
+                embedding=self.embeddings,  # Исправлено здесь
                 persist_directory=persist_directory
             )
             vectorstore.persist()
             return vectorstore
 
+    # Все остальные методы остаются без изменений
     def _prepare_medical_documents(self):
         documents = []
         for _, med in self.medications.iterrows():
